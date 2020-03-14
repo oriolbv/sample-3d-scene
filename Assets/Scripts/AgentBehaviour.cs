@@ -7,13 +7,12 @@ public class AgentBehaviour : MonoBehaviour
 {
     private NavMeshAgent agent;
 
-    // Start is called before the first frame update
     void Start()
     {
+        // Initialize NavMeshAgent Component
         agent = GetComponent<NavMeshAgent>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButton(0))

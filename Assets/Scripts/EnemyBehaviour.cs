@@ -8,15 +8,14 @@ public class EnemyBehaviour : MonoBehaviour
     private NavMeshAgent agent;
     public GameObject PlayerObject;
 
-    // Start is called before the first frame update
     void Start()
     {
+        // Initialize NavMeshAgent Component
         agent = GetComponent<NavMeshAgent>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        agent.destination = PlayerObject.transform.position;
+        agent.destination = PlayerObject.transform.position + new Vector3(2f, 0f, 0f); ;
     }
 }
