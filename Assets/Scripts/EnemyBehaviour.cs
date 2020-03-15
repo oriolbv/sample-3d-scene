@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyBehaviour : MonoBehaviour
@@ -16,6 +14,7 @@ public class EnemyBehaviour : MonoBehaviour
 
     void Update()
     {
-        agent.destination = PlayerObject.transform.position + new Vector3(2f, 0f, 0f); ;
+        // Obtain the steering target of the player and sum a position vector to not touching him.
+        agent.destination = PlayerObject.GetComponentInChildren<NavMeshAgent>().steeringTarget + new Vector3(2f, 0f, 0f);
     }
 }
