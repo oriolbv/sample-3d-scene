@@ -10,7 +10,10 @@ public class FSMPursuer : MonoBehaviour
     [HideInInspector] public StatePursuePlayer statePursuePlayer;
     [HideInInspector] public StatePursueEnemy statePursueEnemy;
 
-    private NavMeshAgent agent;
+    [HideInInspector] public NavMeshAgent agent;
+
+    public GameObject PlayerObject;
+    public GameObject EnemyObject;
 
     private void Awake()
     {
@@ -18,6 +21,16 @@ public class FSMPursuer : MonoBehaviour
         statePursueEnemy = new StatePursueEnemy(this);
 
         agent = GetComponent<NavMeshAgent>();
+    }
+
+    private void Start()
+    {
+        stateActual = statePursueEnemy;
+    }
+
+    private void Update()
+    {
+        stateActual.UpdateState();
     }
 }
  
@@ -33,46 +46,48 @@ public interface IStatePursuer
 public class StatePursuePlayer : IStatePursuer
 {
     private readonly FSMPursuer fsm;
-    public StatePursuePlayer(FSMPursuer fsmSoldado)
+    public StatePursuePlayer(FSMPursuer fsmPursuer)
     {
-        fsm = fsmSoldado;
+        fsm = fsmPursuer;
     }
 
     public void ToStatePursueEnemy()
     {
-        throw new System.NotImplementedException();
+        fsm.stateActual = fsm.statePursueEnemy;
     }
 
     public void ToStatePursuePlayer()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Transition not permitted.");
     }
 
     public void UpdateState()
     {
-        throw new System.NotImplementedException();
+        // Agent should pursue player
+        fsm.agent.destination = fsm.PlayerObject.transform.position + new Vector3(2f, 0f, 0f);
     }
 }
 
 public class StatePursueEnemy : IStatePursuer
 {
     private readonly FSMPursuer fsm;
-    public StatePursueEnemy(FSMPursuer fsmSoldado)
+    public StatePursueEnemy(FSMPursuer fsmPursuer)
     {
-        fsm = fsmSoldado;
+        fsm = fsmPursuer;
     }
     public void ToStatePursueEnemy()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Transition not permitted.");
     }
 
     public void ToStatePursuePlayer()
     {
-        throw new System.NotImplementedException();
+        fsm.stateActual = fsm.statePursuePlayer;
     }
 
     public void UpdateState()
     {
-        throw new System.NotImplementedException();
+        // Agent should pursue enemy
+        fsm.agent.destination = fsm.EnemyObject.transform.position + new Vector3(2f, 0f, 0f);
     }
 }
