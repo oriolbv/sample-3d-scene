@@ -12,6 +12,8 @@ public class FSMPursuer : MonoBehaviour
 
     [HideInInspector] public NavMeshAgent agent;
 
+    [HideInInspector] public float playerActualPosition;
+
     public GameObject PlayerObject;
     public GameObject EnemyObject;
 
@@ -21,6 +23,8 @@ public class FSMPursuer : MonoBehaviour
         statePursueEnemy = new StatePursueEnemy(this);
 
         agent = GetComponent<NavMeshAgent>();
+
+        playerActualPosition = PlayerObject.transform.position.x;
     }
 
     private void Start()
@@ -30,7 +34,22 @@ public class FSMPursuer : MonoBehaviour
 
     private void Update()
     {
-        stateActual.UpdateState();
+        if (PlayerObject.transform.position.x != playerActualPosition && stateActual != statePursuePlayer)
+        {
+            // Player has changed its position
+            stateActual.ToStatePursuePlayer();
+            playerActualPosition = PlayerObject.transform.position.x;
+        }
+        else if (PlayerObject.transform.position.x == playerActualPosition && stateActual != statePursueEnemy)
+        {
+            // Player has NOT changed its position
+            stateActual.ToStatePursueEnemy();
+        }
+        else
+        {
+            stateActual.UpdateState();
+            playerActualPosition = PlayerObject.transform.position.x;
+        }
     }
 }
  
